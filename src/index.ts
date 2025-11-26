@@ -1,3 +1,5 @@
+import type { Puzzle } from "./types.ts";
+
 const AOC_SESSION_KEY = process.env.AOC_SESSION_KEY;
 if (!AOC_SESSION_KEY) {
   console.error("AOC_SESSION_KEY not set in environment!");
@@ -17,7 +19,7 @@ const input = "TODO";
 
 try {
   const puzzlePath = `./days/day${dayToSolve}.ts`;
-  const { part1, part2 } = await import(puzzlePath);
+  const { part1, part2 }: Puzzle = await import(puzzlePath);
 
   console.log(`--- Day ${dayToSolve} ---`);
   console.log("Part 1:", part1(input));
