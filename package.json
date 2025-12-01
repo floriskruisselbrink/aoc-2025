@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node -r dotenv/config src/index.ts",
     "start:dev": "node -r dotenv/config --watch src/index.ts",
-    "test": "node -r dotenv/config --test src/index.test.ts",
+    "test": "node -r dotenv/config --test",
     "type-check": "tsc --noEmit",
     "init-day": "node -r dotenv/config src/utils/initNewDay.ts"
   },

@@ -1,5 +1,3 @@
-import type { Testcase } from "../types.ts";
-
 const parseInput = (rawInput: string) => rawInput;
 
 export const part1 = (rawInput: string) => {
@@ -13,7 +11,3 @@ export const part2 = (rawInput: string) => {
 
   return;
 };
-
-export const testcases: Testcase[] = [
-  { input: "", expectedOutput1: "", expectedOutput2: "" },
-];

@@ -1,5 +1,3 @@
-import type { Testcase } from "../types.ts";
-
 class Dial {
   pointer = 50;
   hitZero = 0;
@@ -87,20 +85,3 @@ export const part2 = (rawInput: string) => {
 
   return dial.hitZero + dial.passesZero;
 };
-
-export const testcases: Testcase[] = [
-  {
-    input: `L68
-L30
-R48
-L5
-R60
-L55
-L1
-L99
-R14
-L82`,
-    expectedOutput1: "3",
-    expectedOutput2: "6",
-  },
-];
