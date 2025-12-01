@@ -1,4 +1,5 @@
 import type { Puzzle } from "./types.ts";
+import readFile from "./utils/readFile.ts";
 
 const AOC_SESSION_KEY = process.env.AOC_SESSION_KEY;
 if (!AOC_SESSION_KEY) {
@@ -14,12 +15,12 @@ if (!dayToSolve) {
   process.exit(1);
 }
 
-// TODO: read input, write to file and pass to puzzle
-const input = "TODO";
-
 try {
   const puzzlePath = `./days/day${dayToSolve}.ts`;
   const { part1, part2 }: Puzzle = await import(puzzlePath);
+
+  const inputPath = `./src/days/day${dayToSolve}-input.txt`;
+  const input = await readFile(inputPath);
 
   console.log(`--- Day ${dayToSolve} ---`);
   console.log("Part 1:", part1(input));

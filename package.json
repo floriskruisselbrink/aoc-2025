@@ -2,7 +2,8 @@
   "name": "aoc-2025",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "private": "true",
+  "main": "src/index.ts",
   "type": "module",
   "scripts": {
     "start": "node -r dotenv/config src/index.ts",
@@ -11,8 +12,8 @@
     "type-check": "tsc --noEmit",
     "init-day": "node -r dotenv/config src/utils/initNewDay.ts"
   },
-  "keywords": [],
-  "author": "Floris Kruisselbrink",
+  "keywords": ["aoc", "typescript", "node"],
+  "author": "Floris Kruisselbrink <floris@vloris.nl>",
   "license": "ISC",
   "packageManager": "pnpm@10.22.0",
   "devDependencies": {
