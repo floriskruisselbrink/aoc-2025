@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync } from "node:fs";
+import { copyFileSync, existsSync, writeFileSync } from "node:fs";
 
 const args = process.argv.slice(2);
 const day = args[0];
@@ -8,19 +8,16 @@ if (!day) {
   process.exit(1);
 }
 
+const dayPrefix = day.padStart(2, "0");
+
 console.log(`Creating template for day ${day}`);
 
 const sourceFile = "templates/dayXX.ts";
-const sourceTestFile = "templates/dayXX.testtemplate.ts";
-const targetFile = `src/days/day${day.padStart(2, "0")}.ts`;
-const targetTestFile = `src/days/day${day.padStart(2, "0")}.test.ts`;
+const targetFile = `src/days/day${dayPrefix}.ts`;
+const targetTestFile = `src/days/day${dayPrefix}.test.ts`;
 
 if (!existsSync(sourceFile)) {
   console.error(`${sourceFile} does not exist, cannot init day ${day}`);
-  process.exit(1);
-}
-if (!existsSync(sourceTestFile)) {
-  console.error(`${sourceTestFile} does not exist, cannot init day ${day}`);
   process.exit(1);
 }
 
@@ -34,4 +31,25 @@ if (existsSync(targetTestFile)) {
 }
 
 copyFileSync(sourceFile, targetFile);
-copyFileSync(sourceTestFile, targetTestFile);
+
+writeFileSync(
+  targetTestFile,
+  `import assert from "node:assert";
+import { describe, it } from "node:test";
+import { part1, part2 } from "./day${dayPrefix}.ts";
+
+const testInput = "TODO";
+
+describe("2025 Day ${dayPrefix}", () => {
+  it("should solve first part", () => {
+    const result = part1(testInput);
+    assert.equal(result, "0");
+  });
+
+  it("should solve second part", () => {
+    const result = part2(testInput);
+    assert.equal(result, "0");
+  });
+});
+`,
+);
