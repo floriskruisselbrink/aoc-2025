@@ -9,7 +9,7 @@ const parseInput = (rawInput: string): Range[] =>
     return { firstId: BigInt(a), lastId: BigInt(b) };
   });
 
-function* generateSequencesInRange(range: Range) {
+function* generateSequencesPart1(range: Range): Generator<string> {
   let minLength = range.firstId.toString().length;
   let maxLength = range.lastId.toString().length;
 
@@ -38,7 +38,7 @@ export const part1 = (rawInput: string) => {
   let sum = BigInt(0);
 
   for (let range of input) {
-    for (let sequence of generateSequencesInRange(range)) {
+    for (let sequence of generateSequencesPart1(range)) {
       const number = BigInt(sequence + sequence);
       if (range.firstId <= number && number <= range.lastId) {
         //console.log("Illegal id found:", number.toString());
@@ -50,8 +50,53 @@ export const part1 = (rawInput: string) => {
   return sum.toString();
 };
 
+function* generateSequences(length: number): Generator<string> {
+  let sequence = BigInt("10000000000000000000".slice(0, length));
+  while (sequence.toString().length === length) {
+    yield sequence.toString();
+    sequence++;
+  }
+}
+
+function* generateSequencesPart2(range: Range): Generator<string> {
+  const minLength = 1;
+  const maxLength = Math.floor(range.lastId.toString().length / 2);
+
+  for (let length = minLength; length <= maxLength; length++) {
+    yield* generateSequences(length);
+  }
+}
+
 export const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  return "0";
+  let illegalIds = new Set<bigint>();
+
+  for (let range of input) {
+    const minLength = range.firstId.toString().length;
+    const maxLength = range.lastId.toString().length;
+
+    for (let sequence of generateSequencesPart2(range)) {
+      let id = sequence;
+      while (id.length < maxLength) {
+        id += sequence;
+
+        if (id.length >= minLength) {
+          const number = BigInt(id);
+
+          if (range.firstId <= number && number <= range.lastId) {
+            if (!illegalIds.has(number)) {
+              //console.log("Illegal id found:", id);
+              illegalIds.add(number);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return illegalIds
+    .values()
+    .reduce((sum, id) => sum + id)
+    .toString();
 };
