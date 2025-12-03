@@ -32,7 +32,7 @@ function* generateSequencesPart1(range: Range): Generator<string> {
   }
 }
 
-export const part1 = (rawInput: string) => {
+export function part1(rawInput: string) {
   const input = parseInput(rawInput);
 
   let sum = BigInt(0);
@@ -48,7 +48,7 @@ export const part1 = (rawInput: string) => {
   }
 
   return sum.toString();
-};
+}
 
 function* generateSequences(length: number): Generator<string> {
   let sequence = BigInt("10000000000000000000".slice(0, length));
@@ -67,7 +67,7 @@ function* generateSequencesPart2(range: Range): Generator<string> {
   }
 }
 
-export const part2 = (rawInput: string) => {
+export function part2(rawInput: string) {
   const input = parseInput(rawInput);
 
   let illegalIds = new Set<bigint>();
@@ -99,4 +99,4 @@ export const part2 = (rawInput: string) => {
     .values()
     .reduce((sum, id) => sum + id)
     .toString();
-};
+}

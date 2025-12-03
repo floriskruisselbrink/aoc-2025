@@ -17,18 +17,18 @@ let findLargestJoltage = (bank: string, length: number): number => {
 };
 findLargestJoltage = memoize(findLargestJoltage);
 
-export const part1 = (rawInput: string) => {
+export function part1(rawInput: string) {
   const input = parseInput(rawInput);
 
   return input
     .map((bank) => findLargestJoltage(bank, 2))
     .reduce((sum, current) => sum + current, 0);
-};
+}
 
-export const part2 = (rawInput: string) => {
+export function part2(rawInput: string) {
   const input = parseInput(rawInput);
 
   return input
     .map((bank) => findLargestJoltage(bank, 12))
     .reduce((sum, current) => sum + current, 0);
-};
+}

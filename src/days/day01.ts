@@ -54,7 +54,7 @@ const parseInput = (rawInput: string) =>
     return { dir, count };
   });
 
-export const part1 = (rawInput: string) => {
+export function part1(rawInput: string) {
   const input = parseInput(rawInput);
 
   const dial = new Dial();
@@ -68,9 +68,9 @@ export const part1 = (rawInput: string) => {
   }
 
   return dial.hitZero;
-};
+}
 
-export const part2 = (rawInput: string) => {
+export function part2(rawInput: string) {
   const input = parseInput(rawInput);
 
   const dial = new Dial();
@@ -84,4 +84,4 @@ export const part2 = (rawInput: string) => {
   }
 
   return dial.hitZero + dial.passesZero;
-};
+}
