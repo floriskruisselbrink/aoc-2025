@@ -1,50 +1,34 @@
+import memoize from "../utils/memoize.ts";
+
 const parseInput = (rawInput: string) =>
   rawInput.split(/\n/g).filter((s) => /\w+/.test(s));
 
-const findLargestNumber = (
-  str: string,
-  largestNumber: number,
-  position: number = 0,
-): number => {
-  let number = largestNumber + 1;
-  let result = -1;
-  while (result < 0 && number > 0) {
-    number--;
-    //console.log("Trying to find", number, "in", str, position);
-    result = str.indexOf(number.toString(), position);
-  }
+let findLargestJoltage = (bank: string, length: number): number => {
+  if (length === 0) return 0;
+  if (bank.length === length) return Number(bank);
 
-  //if (result >= 0) console.log("Found", number, result);
+  const a =
+    Number(bank[0]) * 10 ** (length - 1) +
+    findLargestJoltage(bank.slice(1), length - 1);
 
-  return result;
+  const b = findLargestJoltage(bank.slice(1), length);
+
+  return Math.max(a, b);
 };
+findLargestJoltage = memoize(findLargestJoltage);
 
 export const part1 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  let sum = 0;
-
-  for (let bank of input) {
-    let largestNumber = 9;
-    let first = -1;
-    let second = -1;
-    do {
-      first = findLargestNumber(bank, largestNumber);
-      second = findLargestNumber(bank, 9, first + 1);
-      largestNumber--;
-      if (largestNumber < 0) throw "Oops";
-    } while (first < 0 || second < 0);
-
-    const joltage = Number(bank[first]) * 10 + Number(bank[second]);
-
-    console.log(bank, "has joltage", joltage);
-    sum += joltage;
-  }
-  return sum;
+  return input
+    .map((bank) => findLargestJoltage(bank, 2))
+    .reduce((sum, current) => sum + current, 0);
 };
 
 export const part2 = (rawInput: string) => {
   const input = parseInput(rawInput);
 
-  return "0";
+  return input
+    .map((bank) => findLargestJoltage(bank, 12))
+    .reduce((sum, current) => sum + current, 0);
 };
