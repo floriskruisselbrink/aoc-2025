@@ -1,7 +1,6 @@
 import memoize from "../utils/memoize.ts";
 
-const parseInput = (rawInput: string) =>
-  rawInput.split(/\n/g).filter((s) => /\w+/.test(s));
+const parseInput = (rawInput: string) => rawInput.trimEnd().split("\n");
 
 let findLargestJoltage = (bank: string, length: number): number => {
   if (length === 0) return 0;

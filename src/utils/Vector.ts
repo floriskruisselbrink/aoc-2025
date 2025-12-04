@@ -15,6 +15,21 @@ export default class Vector {
     return new Vector(this.x - other.x, this.y - other.y);
   }
 
+  public *neighbours(): Generator<Vector> {
+    yield new Vector(this.x - 1, this.y);
+    yield new Vector(this.x, this.y - 1);
+    yield new Vector(this.x + 1, this.y);
+    yield new Vector(this.x, this.y + 1);
+  }
+
+  public *allNeighbours(): Generator<Vector> {
+    yield* this.neighbours();
+    yield new Vector(this.x - 1, this.y - 1);
+    yield new Vector(this.x - 1, this.y + 1);
+    yield new Vector(this.x + 1, this.y - 1);
+    yield new Vector(this.x + 1, this.y + 1);
+  }
+
   public toString() {
     return `${this.x},${this.y}`;
   }
