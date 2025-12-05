@@ -1,6 +1,6 @@
 type Range = [number, number];
 
-const parseInput = (rawInput: string) => {
+const parseInput = (rawInput: string): [Range[], number[]] => {
   let [ranges, ingredients] = rawInput.split("\n\n");
 
   return [
@@ -8,7 +8,7 @@ const parseInput = (rawInput: string) => {
       ranges
         .split("\n")
         .map((r) => r.split("-").map(Number))
-        .toSorted((a, b) => a[0] - b[0]),
+        .toSorted((a, b) => a[0] - b[0]) as Range[],
     ),
     ingredients.split("\n").map(Number),
   ];
@@ -31,25 +31,26 @@ function deduplicateRanges(ranges: Range[]): Range[] {
   return newRanges;
 }
 
+function inRange(ingredient: number, range: Range): boolean {
+  return range[0] <= ingredient && ingredient <= range[1];
+}
+
+function rangeLength(range: Range): number {
+  return range[1] - range[0] + 1;
+}
+
 export function part1(rawInput: string) {
   const [ranges, ingredients] = parseInput(rawInput);
 
-  let count = 0;
-
-  for (let ingredient of ingredients) {
-    for (let range of ranges) {
-      if (range[0] <= ingredient && ingredient <= range[1]) {
-        count++;
-        continue;
-      }
-    }
-  }
-
-  return count;
+  return ingredients.reduce(
+    (count, ingredient) =>
+      ranges.find((range) => inRange(ingredient, range)) ? count + 1 : count,
+    0,
+  );
 }
 
 export function part2(rawInput: string) {
-  const input = parseInput(rawInput);
+  const [ranges, _] = parseInput(rawInput);
 
-  return "0";
+  return ranges.reduce((length, range) => length + rangeLength(range), 0);
 }
