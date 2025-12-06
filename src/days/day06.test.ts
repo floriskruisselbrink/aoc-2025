@@ -13,16 +13,16 @@ const realInput = await readFile("src/days/day06-input.txt");
 describe("2025 Day 06", () => {
   it("should have the correct answers", () => {
     assert.equal(part1(realInput), 6891729672676n);
-    assert.equal(part2(realInput), "0");
+    assert.equal(part2(realInput), 9770311947567n);
   });
 
   it("should solve first part", () => {
     const result = part1(testInput);
-    assert.equal(result, 4277556);
+    assert.equal(result, 4277556n);
   });
 
   it("should solve second part", () => {
     const result = part2(testInput);
-    assert.equal(result, "0");
+    assert.equal(result, 3263827n);
   });
 });
