@@ -29,5 +29,22 @@ export function part1(rawInput: string) {
 export function part2(rawInput: string) {
   const input = parseInput(rawInput);
 
-  return 40;
+  const start = input[0].indexOf("S");
+
+  let currentLine = new Array<number>(input[1].length).fill(0);
+  currentLine[start] = 1;
+
+  let paths = 1;
+  for (let line of input.slice(1)) {
+    for (let col = 0; col < line.length; col++) {
+      if (currentLine[col] > 0 && line[col] == "^") {
+        paths += currentLine[col];
+        currentLine[col - 1] += currentLine[col];
+        currentLine[col + 1] += currentLine[col];
+        currentLine[col] = 0;
+      }
+    }
+  }
+
+  return paths;
 }
