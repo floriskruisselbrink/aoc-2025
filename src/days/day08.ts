@@ -1,5 +1,3 @@
-import { close } from "fs";
-
 class Junctionbox {
   public readonly x: number;
   public readonly y: number;
@@ -59,6 +57,37 @@ function createGraph(boxes: Junctionbox[]): Graph {
 
 type Circuit = Set<Junctionbox>;
 
+function mergeCircuits(
+  circuits: Circuit[],
+  left: Junctionbox,
+  right: Junctionbox,
+): Circuit[] {
+  let leftCircuit: Circuit | undefined;
+  let rightCircuit: Circuit | undefined;
+  for (let circuit of circuits) {
+    if (circuit.has(left)) {
+      leftCircuit = circuit;
+    }
+    if (circuit.has(right)) {
+      rightCircuit = circuit;
+    }
+  }
+
+  if (!leftCircuit) throw "Left circuit undefined!";
+  if (!rightCircuit) throw "Right circuit undefined!";
+
+  if (leftCircuit != rightCircuit) {
+    for (let box of rightCircuit) {
+      leftCircuit.add(box);
+      rightCircuit.delete(box);
+    }
+    // delete rightCircuit from list
+    return circuits.filter((c) => c != rightCircuit);
+  } else {
+    return circuits;
+  }
+}
+
 export function part1(rawInput: string, connectionsToMake = 1000) {
   const input = parseInput(rawInput);
 
@@ -74,28 +103,7 @@ export function part1(rawInput: string, connectionsToMake = 1000) {
   for (let i = 0; i < connectionsToMake; i++) {
     const { left, right } = graph.edges[i];
 
-    let leftCircuit: Circuit | undefined;
-    let rightCircuit: Circuit | undefined;
-    for (let circuit of circuits) {
-      if (circuit.has(left)) {
-        leftCircuit = circuit;
-      }
-      if (circuit.has(right)) {
-        rightCircuit = circuit;
-      }
-    }
-
-    if (!leftCircuit) throw "Left circuit undefined!";
-    if (!rightCircuit) throw "Right circuit undefined!";
-
-    if (leftCircuit != rightCircuit) {
-      for (let box of rightCircuit) {
-        leftCircuit.add(box);
-        rightCircuit.delete(box);
-      }
-      // delete rightCircuit from list
-      circuits = circuits.filter((c) => c != rightCircuit);
-    }
+    circuits = mergeCircuits(circuits, left, right);
   }
 
   // order by circuit-size, multiply largest three
@@ -108,5 +116,24 @@ export function part1(rawInput: string, connectionsToMake = 1000) {
 export function part2(rawInput: string) {
   const input = parseInput(rawInput);
 
-  return "0";
+  const graph = createGraph(input);
+
+  let circuits: Circuit[] = [];
+  for (let box of graph.vertices) {
+    const circuit = new Set<Junctionbox>();
+    circuit.add(box);
+    circuits.push(circuit);
+  }
+
+  for (let i = 0; i < graph.edges.length; i++) {
+    const { left, right } = graph.edges[i];
+
+    circuits = mergeCircuits(circuits, left, right);
+
+    if (circuits.length == 1) {
+      return left.x * right.x;
+    }
+  }
+
+  throw "Didn't find a single circuit";
 }
