@@ -2,6 +2,11 @@ export default class Vector {
   public readonly x: number;
   public readonly y: number;
 
+  public static of(str: string): Vector {
+    const [x, y] = str.split(",");
+    return new Vector(Number(x), Number(y));
+  }
+
   public constructor(x = 0, y = 0) {
     this.x = x;
     this.y = y;
