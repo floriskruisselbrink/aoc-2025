@@ -15,9 +15,9 @@ const testInput = `7,1
 const realInput = await readFile("src/days/day09-input.txt");
 
 describe("2025 Day 09", () => {
-  it.skip("should have the correct answers", () => {
+  it("should have the correct answers", () => {
     assert.equal(part1(realInput), 4782268188);
-    assert.equal(part2(realInput), "");
+    assert.equal(part2(realInput), 1574717268);
   });
 
   it("should solve first part", () => {
@@ -27,6 +27,6 @@ describe("2025 Day 09", () => {
 
   it("should solve second part", () => {
     const result = part2(testInput);
-    assert.equal(result, "0");
+    assert.equal(result, 24);
   });
 });
