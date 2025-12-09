@@ -6,24 +6,13 @@ const parseInput = (rawInput: string) =>
     .split("\n")
     .map((line) => Vector.of(line));
 
-function rectangleSize(a: Vector, b: Vector): number {
-  return (
-    (Math.max(a.x, b.x) - Math.min(a.x, b.x) + 1) *
-    (Math.max(a.y, b.y) - Math.min(a.y, b.y) + 1)
-  );
-}
-
 class Line {
   readonly a: Vector;
   readonly b: Vector;
 
   constructor(a: Vector, b: Vector) {
-    this.a = a;
-    this.b = b;
-  }
-
-  intersects(other: Line): boolean {
-    return true; // TODO:
+    this.a = new Vector(Math.min(a.x, b.x), Math.min(a.y, b.y));
+    this.b = new Vector(Math.max(a.x, b.x), Math.max(a.y, b.y));
   }
 }
 
@@ -33,36 +22,21 @@ class Rectangle {
   readonly size: number;
 
   constructor(a: Vector, b: Vector) {
-    this.size = rectangleSize(a, b);
-
-    const x1 = Math.min(a.x, b.x);
-    const x2 = Math.max(a.x, b.x);
-    const y1 = Math.min(a.y, b.y);
-    const y2 = Math.max(a.y, b.y);
-    this.topLeft = new Vector(x1, y1);
-    this.bottomRight = new Vector(x2, y2);
+    this.topLeft = new Vector(Math.min(a.x, b.x), Math.min(a.y, b.y));
+    this.bottomRight = new Vector(Math.max(a.x, b.x), Math.max(a.y, b.y));
+    this.size =
+      (this.bottomRight.x - this.topLeft.x + 1) *
+      (this.bottomRight.y - this.topLeft.y + 1);
   }
 
-  intersectsLine(line: Line): boolean {
-    const x1 = Math.min(line.a.x, line.b.x);
-    const x2 = Math.max(line.a.x, line.b.x);
-    const y1 = Math.min(line.a.y, line.b.y);
-    const y2 = Math.max(line.a.y, line.b.y);
+  intersectsLine = (line: Line): boolean =>
+    this.topLeft.x < line.b.x &&
+    this.bottomRight.x > line.a.x &&
+    this.topLeft.y < line.b.y &&
+    this.bottomRight.y > line.a.y;
 
-    return (
-      this.topLeft.x < x2 &&
-      this.bottomRight.x > x1 &&
-      this.topLeft.y < y2 &&
-      this.bottomRight.y > y1
-    );
-  }
-
-  intersectsPolygon(edges: Line[]): boolean {
-    for (let edge of edges) {
-      if (this.intersectsLine(edge)) return true;
-    }
-    return false;
-  }
+  intersectsPolygon = (edges: Line[]): boolean =>
+    edges.some((edge) => this.intersectsLine(edge));
 }
 
 function calculateRectangles(coordinates: Vector[]): Rectangle[] {
@@ -72,7 +46,7 @@ function calculateRectangles(coordinates: Vector[]): Rectangle[] {
 }
 
 function createPolygon(coordinates: Vector[]): Line[] {
-  return coordinates.flatMap(
+  return coordinates.map(
     (a, i) =>
       new Line(
         a,
@@ -93,12 +67,6 @@ export function part2(rawInput: string) {
   const rectangles = calculateRectangles(input);
   const polygon = createPolygon(input);
 
-  // TODO: find first rectangle that doesn't go outside the polygon sketched by the input coordinates
-  for (let rectangle of rectangles) {
-    if (!rectangle.intersectsPolygon(polygon)) {
-      return rectangle.size;
-    }
-  }
-
-  return 0;
+  return rectangles.find((rectangle) => !rectangle.intersectsPolygon(polygon))
+    ?.size;
 }
