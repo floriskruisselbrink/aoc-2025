@@ -12,7 +12,11 @@
     "type-check": "tsc --noEmit",
     "init-day": "node -r dotenv/config src/utils/initNewDay.ts"
   },
-  "keywords": ["aoc", "typescript", "node"],
+  "keywords": [
+    "aoc",
+    "typescript",
+    "node"
+  ],
   "author": "Floris Kruisselbrink <floris@vloris.nl>",
   "license": "ISC",
   "packageManager": "pnpm@10.22.0",
@@ -21,6 +25,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "dotenv": "^17.2.3"
+    "dotenv": "^17.2.3",
+    "z3-solver": "^4.15.4"
   }
 }

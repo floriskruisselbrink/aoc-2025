@@ -23,8 +23,8 @@ try {
   const input = await readFile(inputPath);
 
   console.log(`--- Day ${dayToSolve} ---`);
-  console.log("Part 1:", part1(input));
-  console.log("Part 2:", part2(input));
+  console.log("Part 1:", await part1(input));
+  console.log("Part 2:", await part2(input));
 } catch (error) {
   console.error(error);
   process.exit(1);

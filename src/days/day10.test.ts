@@ -10,9 +10,9 @@ const testInput = `[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
 const realInput = await readFile("src/days/day10-input.txt");
 
 describe("2025 Day 10", () => {
-  it("should have the correct answers", () => {
-    assert.equal(part1(realInput), 530);
-    //assert.equal(part2(realInput), "");
+  it("should have the correct answers", async () => {
+    assert.equal(await part1(realInput), 530);
+    assert.equal(await part2(realInput), 20172);
   });
 
   it("should solve first part", () => {
@@ -20,8 +20,8 @@ describe("2025 Day 10", () => {
     assert.equal(result, 7);
   });
 
-  it("should solve second part", () => {
-    const result = part2(testInput);
-    assert.equal(result, "0");
+  it("should solve second part", async () => {
+    const result = await part2(testInput);
+    assert.equal(result, 33);
   });
 });
