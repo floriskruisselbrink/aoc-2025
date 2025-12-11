@@ -1,44 +1,55 @@
-type Device = [string, string[]];
+type Graph = Map<string, string[]>;
 
-const parseInput = (rawInput: string): Device[] =>
-  rawInput
-    .trimEnd()
-    .split("\n")
-    .map((line) => {
-      const [device, outputs] = line.split(": ");
-      return [device, outputs.split(" ")];
-    });
+const parseInput = (rawInput: string): Graph =>
+  new Map<string, string[]>(
+    rawInput
+      .trimEnd()
+      .split("\n")
+      .map((line) => {
+        const [device, outputs] = line.split(": ");
+        return [device, outputs.split(" ")];
+      }),
+  );
+
+function dfs(graph: Graph, start: string, destination: string): number {
+  const memo = new Map<string, number>();
+
+  const dfs_recursive = (current: string): number => {
+    if (current === destination) {
+      return 1;
+    }
+    if (memo.has(current)) {
+      return memo.get(current)!;
+    }
+
+    const count = (graph.get(current) ?? []).reduce(
+      (sum, output) => sum + dfs_recursive(output),
+      0,
+    );
+    memo.set(current, count);
+    return count;
+  };
+
+  return dfs_recursive(start);
+}
 
 export function part1(rawInput: string) {
-  const input = parseInput(rawInput);
+  const graph = parseInput(rawInput);
 
-  const graph = new Map<string, string[]>(input);
-  // console.log(graph);
-
-  let allPaths = 0;
-  const queue = new Array<string[]>();
-  queue.push(["you"]);
-
-  while (queue.length > 0) {
-    const path = queue.shift()!;
-    const current = path[path.length - 1];
-
-    if (current === "out") {
-      // console.log("Found path", path);
-      allPaths++;
-    }
-
-    for (const output of graph.get(current) ?? []) {
-      const newPath = [...path, output];
-      queue.push(newPath);
-    }
-  }
-
-  return allPaths;
+  return dfs(graph, "you", "out");
 }
 
 export function part2(rawInput: string) {
-  const input = parseInput(rawInput);
+  const graph = parseInput(rawInput);
 
-  return "0";
+  return (
+    // first fft, then dac
+    dfs(graph, "svr", "fft") *
+      dfs(graph, "fft", "dac") *
+      dfs(graph, "dac", "out") +
+    // first dac, then fft
+    dfs(graph, "svr", "dac") *
+      dfs(graph, "dac", "fft") *
+      dfs(graph, "fft", "out")
+  );
 }
